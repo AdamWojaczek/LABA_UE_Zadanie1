@@ -88,12 +88,12 @@ void CApplication::RunQuest(int questId)
 
 	switch (questId)
 	{
-		case 1:  CalculateSquareArea();		break;
-		case 2:	 CalculateGradeAverage();	break;
-		case 3:	 CelsiusToFahrenheit();		break;
-		case 4:	 HelloFriend();				break;
+		case 1:  CalculateSquareArea();			break;
+		case 2:	 CalculateGradeAverage();		break;
+		case 3:	 CelsiusToFahrenheit();			break;
+		case 4:	 HelloFriend();					break;
+		case 5:	 SumFirstAndLastTabElement();	break;
 
-		case 5:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
 		case 6:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
 		case 7:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
 		case 8:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
@@ -194,22 +194,22 @@ void CApplication::HelloFriend()
 		ios.PrintLine("Nie podales imienia!");
 }
 
+void CApplication::SumFirstAndLastTabElement()
+{
+	const unsigned int tabCount = 10;
+	int myRandomTable[tabCount] = { 0 };
+	
+	srand(time(nullptr));
+	for (unsigned int i = 0; i < tabCount; i++)
+		myRandomTable[i] = (int)(rand() % 1000) - 500;
+
+	ios.Print("Moja losowa tablica: ");
+	for (unsigned int i = 0; i < tabCount; i++)
+		ios.Print("[" + ss.ValueToStr(myRandomTable[i]) + "] ");
+
+	int sum = myRandomTable[0] + myRandomTable[tabCount - 1];
+	ios.PrintLine("\nSUMA pierwszego i ostatniego elementu to: " + ss.ValueToStr(sum));
+}
+
 //---------------------------------------------------------------------------------------------------------------------
 
-/*
-1. Pobierz od u¿ytkownika d³ugoœæ boku kwadratu i oblicz jego pole, wynik wypisz na ekranie. 
-2. Oblicz œredni¹ arytmetyczn¹ 5 ocen pobranych od u¿ytkownika i wynik wypisz na ekranie. 
-3. Pobierz od u¿ytkownika temperaturê i przelicz j¹ na stopnie Fahrenheita i wynik wypisz na ekranie. 
-4. Pobierz od u¿ytkownika imiê - jeœli imiê to Kamil napisz “Czesc kamil” jeœli imiê to Kasia napisz “Witaj Kasia”, dla innych imion napisz “Hej”
-5. Zadeklaruj pust¹ tablicê, wprowadŸ dane rêczne a nastêpnie wypisz na ekranie sumê pierwszego i ostatniego elementu tablicy.
-6. Pobierz od u¿ytkownika liczbê i sprawdŸ, czy jest wiêksza od 100 i parzysta lub wiêksza od 200 - wypisz na ekranie informacjê zwrotn¹. 
-7. Gra logiczna - zadeklaruj wartoœæ sekretnej liczby (w zakresie 1-10), poproœ u¿ytkownika o zgadniêcie liczby i wypisz na ekranie informacjê zwrotn¹ (liczba za ma³a, za du¿a, trafi³eœ) 
-8. Wczytaj piêæ liczb od u¿ytkownika i wypisz je na ekranie w odwrotnej kolejnoœci
-9. Pobierz od u¿ytkownika imiê i cyfrê, nastêpnie wypisz na ekranie podane imiê podan¹ liczbê razy. 
-10. Zapytaj u¿ytkownika o iloœæ wierszy i iloœæ kolumn, a nastêpnie narysuj taki prostok¹t z *
-przyk³ad: 4 wiersze i 3 kolumny 
-* * *
-* * *
-* * *
-* * *
-*/
