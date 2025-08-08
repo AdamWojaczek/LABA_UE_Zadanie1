@@ -93,8 +93,7 @@ void CApplication::RunQuest(int questId)
 		case 3:	 CelsiusToFahrenheit();			break;
 		case 4:	 HelloFriend();					break;
 		case 5:	 SumFirstAndLastTabElement();	break;
-
-		case 6:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
+		case 6:	 CheckUserNumber();				break;	
 		case 7:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
 		case 8:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
 		case 9:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
@@ -109,6 +108,8 @@ void CApplication::RunQuest(int questId)
 	ios.WaitForEnter();
 }
 
+
+// [1] Pobierz od u¿ytkownika d³ugoœæ boku kwadratu i oblicz jego pole, wynik wypisz na ekranie.	
 void CApplication::CalculateSquareArea()
 {	
 	ios.Print("Podaj dlugosc boku kwadratu (liczba calkowita/zmiennoprzecinkowa) [cm]: ");
@@ -128,6 +129,7 @@ void CApplication::CalculateSquareArea()
 	}
 }
 
+// [2] Oblicz œredni¹ arytmetyczn¹ 5 ocen pobranych od u¿ytkownika i wynik wypisz na ekranie.
 void CApplication::CalculateGradeAverage()
 {
 	ios.Print("Podaj liczbe ocen: ");
@@ -164,6 +166,7 @@ void CApplication::CalculateGradeAverage()
 	}
 }
 
+// [3] Pobierz od u¿ytkownika temperaturê i przelicz j¹ na stopnie Fahrenheita i wynik wypisz na ekranie.
 void CApplication::CelsiusToFahrenheit()
 {
 	ios.Print("Podaj temperature w stopniach Celsjusza: ");
@@ -177,6 +180,8 @@ void CApplication::CelsiusToFahrenheit()
 	}
 }
 
+// [4] Pobierz od u¿ytkownika imiê - jeœli imiê to Kamil napisz “Czesc kamil”
+// jeœli imiê to Kasia napisz “Witaj Kasia”, dla innych imion napisz “Hej”
 void CApplication::HelloFriend()
 {
 	ios.Print("Jak masz na imie? ");
@@ -194,6 +199,8 @@ void CApplication::HelloFriend()
 		ios.PrintLine("Nie podales imienia!");
 }
 
+// [5] Zadeklaruj pust¹ tablicê, wprowadŸ dane rêczne a nastêpnie wypisz na ekranie
+// sumê pierwszego i ostatniego elementu tablicy.
 void CApplication::SumFirstAndLastTabElement()
 {
 	const unsigned int tabCount = 10;
@@ -211,5 +218,27 @@ void CApplication::SumFirstAndLastTabElement()
 	ios.PrintLine("\nSUMA pierwszego i ostatniego elementu to: " + ss.ValueToStr(sum));
 }
 
-//---------------------------------------------------------------------------------------------------------------------
+// [6] Pobierz od u¿ytkownika liczbê i sprawdŸ, czy jest wiêksza od 100 i parzysta lub wiêksza od 200
+// wypisz na ekranie informacjê zwrotn¹.
+void CApplication::CheckUserNumber()
+{
+	ios.Print("Podaj liczbe calkowita (przytniemy czesc dziesietna): ");
+	int value;
+	if (ios.ReadInt(value))
+	{
+		if ((value > 100) && (value % 2 == 0))
+			ios.PrintLine("Podana liczba jest WIEKSZA od 100 i PARZYSTA");
+		else if (value > 200)
+			ios.PrintLine("Podana liczba jest WIEKSZA od 200");
+		else if (value > 0)
+			ios.PrintLine("Podana liczba jest DODATNIA");
+		else if (value < 0)
+			ios.PrintLine("Podana liczba jest UJEMNA");
+		else if (value == 0)
+			ios.PrintLine("Podana liczba to ZERO");
+		else
+			ios.PrintLine("Tutaj nie wejdziemy :)");
+	}
+}
 
+//---------------------------------------------------------------------------------------------------------------------

@@ -27,6 +27,7 @@ private:
 	void CelsiusToFahrenheit();
 	void HelloFriend();
 	void SumFirstAndLastTabElement();
+	void CheckUserNumber();
 
 public:
 	int Run();
