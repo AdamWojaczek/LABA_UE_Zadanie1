@@ -96,7 +96,7 @@ void CApplication::RunQuest(int questId)
 		case 6:	 CheckUserNumber();				break;	
 		case 7:	 GuessTheNumber();				break;
 		case 8:	 ReverseData();					break;
-		case 9:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
+		case 9:	 PrintNameMultipleTimes();		break;
 		case 10: ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
 		
 		default:
@@ -315,6 +315,30 @@ void CApplication::ReverseData()
 	ios.Print("W odwrotnej kolejnosci: ");
 	for (int i = maxNumbers - 1; i > -1; i--)
 		ios.Print("[" + ss.ValueToStr(numbers[i]) + "] ");
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// [9] Pobierz od u¿ytkownika imiê i cyfrê, nastêpnie wypisz na ekranie podane imiê podan¹ liczbê razy.
+void CApplication::PrintNameMultipleTimes()
+{
+	ios.Print("Podaj imie: ");
+	string name;	
+	if (ios.ReadString(name))
+	{
+		ios.Print("Ile raz wypisac je na ekranie? ");
+		int number;
+		if (ios.ReadInt(number))
+		{			
+			string row = "", col = "";
+			for (int i = 0; i < number; i++)
+			{
+				row += name + " ";
+				col += "\n" + name;
+			}
+			ios.PrintLine("\nPOZIOMO\n" + row);
+			ios.PrintLine("\nPIONOWO" + col);
+		}
+	}
 }
 
 //---------------------------------------------------------------------------------------------------------------------

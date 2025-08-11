@@ -30,6 +30,7 @@ private:
 	void CheckUserNumber();
 	void GuessTheNumber();
 	void ReverseData();
+	void PrintNameMultipleTimes();
 
 public:
 	int Run();
