@@ -29,6 +29,7 @@ private:
 	void SumFirstAndLastTabElement();
 	void CheckUserNumber();
 	void GuessTheNumber();
+	void ReverseData();
 
 public:
 	int Run();
