@@ -31,6 +31,7 @@ private:
 	void GuessTheNumber();
 	void ReverseData();
 	void PrintNameMultipleTimes();
+	void DrawRectangle();
 
 public:
 	int Run();

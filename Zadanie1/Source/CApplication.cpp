@@ -97,7 +97,7 @@ void CApplication::RunQuest(int questId)
 		case 7:	 GuessTheNumber();				break;
 		case 8:	 ReverseData();					break;
 		case 9:	 PrintNameMultipleTimes();		break;
-		case 10: ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
+		case 10: DrawRectangle();				break;
 		
 		default:
 			ios.PrintLine("Nieprawidlowy numer (" + ss.ValueToStr(questId) + ") zadania");
@@ -215,7 +215,7 @@ void CApplication::SumFirstAndLastTabElement()
 	const unsigned int tabCount = 10;
 	int myRandomTable[tabCount] = { 0 };
 	
-	srand(time(nullptr));
+	srand((int)time(nullptr));
 	for (unsigned int i = 0; i < tabCount; i++)
 		myRandomTable[i] = (int)(rand() % 1000) - 500;
 
@@ -260,7 +260,7 @@ void CApplication::GuessTheNumber()
 {
 	bool result = false;
 	
-	srand(time(nullptr));
+	srand((int)time(nullptr));
 	int secretNumber = (int)(rand() % 10) + 1;
 	int counter = 0, number = -1;
 
@@ -339,6 +339,51 @@ void CApplication::PrintNameMultipleTimes()
 			ios.PrintLine("\nPIONOWO" + col);
 		}
 	}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/* [10] Zapytaj u¿ytkownika o iloœæ wierszy i iloœæ kolumn, a nastêpnie narysuj taki prostok¹t z *
+	przyk³ad: 4 wiersze i 3 kolumny
+	***
+	***
+	***
+	***
+*/
+
+void CApplication::DrawRectangle()
+{
+	bool result = false;
+	int rows = 0, cols = 0;
+	char symbol = '*';
+
+	ios.Print("Podaj liczbe wierszy [ENTER]: ");
+	if (ios.ReadInt(rows) && (rows > 0))
+	{
+		ios.Print("Podaj liczbe kolumn [ENTER]: ");
+		if (ios.ReadInt(cols) && (cols > 0))
+		{
+			ios.Print("Podaj znak wypelnienia [ENTER]: ");
+			string buf = "";
+			if (ios.ReadString(buf) && (ss.StrTrim(buf).length() > 0))
+			{
+				symbol = buf[0];
+				result = true;
+			}
+		}
+	}
+
+	if (result)
+	{
+		for (int i = 0; i < rows; i++)
+		{
+			ios.PrintLine("");
+			for (int j = 0; j < cols; j++)
+				ios.Print(string(1, symbol));
+		}
+		ios.PrintLine("");
+	}
+	else
+		ios.PrintLine("Podales bledne dane!");
 }
 
 //---------------------------------------------------------------------------------------------------------------------
