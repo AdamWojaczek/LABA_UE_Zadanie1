@@ -9,20 +9,15 @@ int CApplication::Run()
 	while (!close)
 	{
 		ShowMenu();
-		
+	
 		int questId;
 		EQuestState questState = SelectQuest(questId);
 		switch (questState)
 		{
-			case EQuestState::CLOSE:
-				close = true;
-				break;
-
-			case EQuestState::RUN:
-				RunQuest(questId);
-				break;
-
-			case EQuestState::ERROR: default:
+			case EQuestState::CLOSE:	close = true;			break;
+			case EQuestState::RUN:		RunQuest(questId);		break;
+			case EQuestState::ERROR:
+			default:
 				ios.PrintLine("Wybrano nieprawidlowy numer zadania!");
 				ios.WaitForEnter();
 		}
@@ -37,22 +32,21 @@ void CApplication::ShowMenu()
 {
 	ios.ClearScreen();
 	ios.PrintLine("Kurs Unreal Engine: Zadanie praktyczne 1 - Wprowadzenie do C++");
-	ios.PrintSeparatorLine();
-	ios.PrintLine("");
-	ios.PrintLine("Tablica zadan:");
-	ios.PrintLine("[1]\tObliczanie pola kwadratu");
-	ios.PrintLine("[2]\tObliczanie sredniej arytmetycznej ocen uzytkownikow");
-	ios.PrintLine("[3]\tPrzeliczanie temperatury z Celsjusza na Farenheita");
-	ios.PrintLine("[4]\tCzesc Kamil, Kasia, a moze Hej...");
-	ios.PrintLine("[5]\tSuma pierwszego i ostatniego elementu tablicy");
-	ios.PrintLine("[6]\tSprawdzanie czy liczba jest wieksza od 100 i parzysta...");
-	ios.PrintLine("[7]\tGra logiczna - sekretna liczba");
-	ios.PrintLine("[8]\tOdwracanie kolejnosc liczb");
-	ios.PrintLine("[9]\tPowielanie imienia uzytkownika");
-	ios.PrintLine("[10]\tWyswietlanie prostokata ze znakow");
-	ios.PrintLine("---");
-	ios.PrintLine("[0]\tKoniec programu!");
-	ios.PrintLine("");
+	string quests = string("--------------------------------------------------------------") +
+					"\n\nTablica zadan:" +
+					"\n[1]\tObliczanie pola kwadratu" +
+					"\n[2]\tObliczanie sredniej arytmetycznej ocen" +
+					"\n[3]\tPrzeliczanie temperatury z Celsjusza na Farenheita" +
+					"\n[4]\tCzesc, Witaj, Hej" +
+					"\n[5]\tSuma pierwszego i ostatniego elementu tablicy" +
+					"\n[6]\tSprawdzanie czy liczba jest wieksza od 100 i parzysta..." +
+					"\n[7]\tGra logiczna - sekretna liczba" +
+					"\n[8]\tOdwracanie kolejnosci liczb" +
+					"\n[9]\tWielokrotne drukowanie imienia" +
+					"\n[10]\tWyswietlanie prostokata ze znakow" +
+					"\n---" +
+					"\n[0]\tKoniec programu!\n";
+	ios.PrintLine(quests);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -60,9 +54,8 @@ void CApplication::ShowMenu()
 EQuestState CApplication::SelectQuest(int& questId)
 {
 	EQuestState result = EQuestState::ERROR;
-	ios.Print("Wybierz zadanie: ");
 	
-	if (ios.ReadInt(questId))
+	if (ios.ReadInt("Wybierz zadanie:", questId))
 	{
 		if (questId == 0)
 			result = EQuestState::CLOSE;			
@@ -81,8 +74,7 @@ EQuestState CApplication::SelectQuest(int& questId)
 //---------------------------------------------------------------------------------------------------------------------
 
 void CApplication::RunQuest(int questId)
-{
-	ios.PrintLine("");
+{	
 	ios.PrintLine(">>> ZADANIE NR " + ss.ValueToStr(questId) + " >>>");
 	ios.PrintLine("");
 
@@ -102,32 +94,28 @@ void CApplication::RunQuest(int questId)
 		default:
 			ios.PrintLine("Nieprawidlowy numer (" + ss.ValueToStr(questId) + ") zadania");
 	}
+	
 	ios.PrintLine("");
 	ios.PrintLine("<<< ZADANIE NR " + ss.ValueToStr(questId) + " <<<");
-	ios.PrintLine("");
+
 	ios.WaitForEnter();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 // [1] Pobierz od u¿ytkownika d³ugoœæ boku kwadratu i oblicz jego pole, wynik wypisz na ekranie.
- 	
+
 void CApplication::CalculateSquareArea()
 {	
-	ios.Print("Podaj dlugosc boku kwadratu (liczba calkowita/zmiennoprzecinkowa) [cm]: ");
-	
 	double value;
-	if (ios.ReadDouble(value))
+	if (ios.ReadDouble("Podaj dlugosc boku kwadratu (liczba calkowita/rzeczywista) [cm]:", value) && (value > 0))
 	{
-		if (value > 0)
-		{
-			double area = value * value;
-			string log = "Pole kwadratu o boku " + ss.ValueToStr(value, 2) + " cm " +
-						 "wynosi " + ss.ValueToStr(area, 2) + " cm2";
-			ios.PrintLine(log);
-		}
-		else
-			ios.PrintLine("Podano nieprawidlowa dlugosc boku kwadratu!");
+		double area = value * value;
+		string log = "Pole kwadratu o boku " + ss.ValueToStr(value, 1) + " cm " +
+					 "wynosi " + ss.ValueToStr(area, 2) + " cm2";
+		ios.PrintLine(log);
 	}
+	else
+		ios.PrintLine("Podano nieprawidlowa dlugosc boku kwadratu!");
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -135,38 +123,36 @@ void CApplication::CalculateSquareArea()
 
 void CApplication::CalculateGradeAverage()
 {
-	ios.Print("Podaj liczbe ocen: ");
 	int count;
-	if (ios.ReadInt(count))
+	if (ios.ReadInt("Podaj liczbe ocen do wyznaczenia sredniej:", count) && (count > 1))
 	{
-		if (count > 1)
+		ios.PrintLine("Oceny podajemy w skali od 0.0 do 10.0");
+		std::vector<double> grades(count);
+		for (int i = 0; i < count; i++)
 		{
-			ios.PrintLine("Oceny podajemy w skali od 0.0 do 10.0");
-			std::vector<double> grades(count);
-			for (int i = 0; i < count; i++)
+			ios.Print("Ocena nr " + ss.ValueToStr(i + 1) + ": ");
+			bool readResult;
+			double grade;
+			do
 			{
-				ios.Print("Ocena nr " + ss.ValueToStr(i + 1) + ": ");
-				bool readResult;
-				double grade;
-				do
-				{
-					readResult = ios.ReadDouble(grade) ? ((grade >= 0.0) && (grade <= 10.0)) : false;
-					if (readResult)
-						grades[i] = grade;
-
-				} while (!readResult);
-			}
-
-			double average = 0.0;
-			for (int i = 0; i < count; i++)
-				average += grades[i];
-			average /= (double)count;
-
-			ios.PrintLine("Srednia z ocena wynosi " + ss.ValueToStr(average, 3) + " (liczba ocen: " + ss.ValueToStr(count) + ")");
+				readResult = ios.ReadDouble(grade) ? ((grade >= 0.0) && (grade <= 10.0)) : false;
+				if (readResult)
+					grades[i] = grade;
+				else
+					ios.Print("Nieprawidlowa wartosc, powtorz: ");
+			} while (!readResult);
 		}
-		else
-			ios.PrintLine("Aby policzyc srednia, nalezy podac prezynajmniej 2 oceny");
+
+		double arithmeticMean = 0.0;
+		for (int i = 0; i < count; i++)
+			arithmeticMean += grades[i];
+		arithmeticMean /= (double)count;
+
+		ios.PrintLine("Srednia z ocena wynosi " + ss.ValueToStr(arithmeticMean, 2) +
+					  " (liczba ocen: " + ss.ValueToStr(count) + ")");
 	}
+	else
+		ios.PrintLine("Aby policzyc srednia, nalezy podac przynajmniej 2 oceny");
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -174,13 +160,12 @@ void CApplication::CalculateGradeAverage()
 
 void CApplication::CelsiusToFahrenheit()
 {
-	ios.Print("Podaj temperature w stopniach Celsjusza: ");
-
 	double celsius;
-	if (ios.ReadDouble(celsius))
+	if (ios.ReadDouble("Podaj temperature w stopniach Celsjusza:", celsius))
 	{
 		double fahrenheit = (celsius * 9.0/5.0) + 32.0;
-		string log = "Temperatura " + ss.ValueToStr(celsius, 1) + " st. C to " + ss.ValueToStr(fahrenheit, 1) + " st. F";
+		string log = "Temperatura " + ss.ValueToStr(celsius, 1) + " st. C == " +
+					 ss.ValueToStr(fahrenheit, 1) + " st. F";
 		ios.PrintLine(log);
 	}
 }
@@ -191,9 +176,8 @@ void CApplication::CelsiusToFahrenheit()
 
 void CApplication::HelloFriend()
 {
-	ios.Print("Jak masz na imie? ");
 	string name;
-	if (ios.ReadString(name) || !name.empty())
+	if (ios.ReadString("Jak masz na imie?", name) || !name.empty())
 	{
 		if (ss.StrCompareIC(name, "Kamil"))
 			ios.PrintLine("Czesc Kamil");
@@ -233,9 +217,8 @@ void CApplication::SumFirstAndLastTabElement()
 
 void CApplication::CheckUserNumber()
 {
-	ios.Print("Podaj liczbe calkowita (przytniemy czesc dziesietna): ");
 	int value;
-	if (ios.ReadInt(value))
+	if (ios.ReadInt("Podaj liczbe calkowita:", value))
 	{
 		if ((value > 100) && (value % 2 == 0))
 			ios.PrintLine("Podana liczba jest WIEKSZA od 100 i PARZYSTA");
@@ -264,28 +247,27 @@ void CApplication::GuessTheNumber()
 	int secretNumber = (int)(rand() % 10) + 1;
 	int counter = 0, number = -1;
 
-	ios.PrintLine("Zgadnij ukryta liczbe (calkowta) od 1 do 10, [0 koniec gry]");
+	ios.PrintLine("Zgadnij sekretna liczbe calkowita z zakresu od 1 do 10 [0 - koniec gry]");
 	while (!result && (number != 0))
 	{
-		ios.Print("Podaj liczbe [proba nr " + ss.ValueToStr(++counter) + "]: ");
-		if (ios.ReadInt(number))
+		if (ios.ReadInt("Podaj liczbe [proba nr " + ss.ValueToStr(++counter) + "]:", number))
 		{
 			if ((number > 0) && (number < 11))
 			{
 				if (number == secretNumber)
 				{
-					ios.PrintLine("*** Gratuluje, prawidlowo zgadles ukryta liczbe! ***");
+					ios.PrintLine("*** Gratuluje! Prawidlowo zgadles sekretna liczbe ***");
 					result = true;					
 				}
 				else if (number > secretNumber)
-					ios.PrintLine("[>] Liczba jest za duza");
+					ios.PrintLine("[>] Za duza");
 				else
-					ios.PrintLine("[<] Liczba jest za mala");
+					ios.PrintLine("[<] Za mala");
 			}
 			else if (number == 0)
 				ios.PrintLine("Opuszczasz gre...");
 			else
-				ios.PrintLine("Nieprawidlowa liczba!");
+				ios.PrintLine("Nieprawidlowa wartosc!");
 		}
 	}
 }
@@ -298,47 +280,55 @@ void CApplication::ReverseData()
 	const int maxNumbers = 5;
 	int numbers[maxNumbers];
 
-	ios.PrintLine("Podaj " + ss.ValueToStr(maxNumbers) + " dowolnych liczb calkowitych  [ENTER - zatwierdza]");
+	ios.PrintLine("Podaj " + ss.ValueToStr(maxNumbers) + " dowolnych liczb calkowitych [ENTER - zatwierdza]");
 	int i = 0;
-	bool breakInput = false;
-	while ((i < maxNumbers) && !breakInput)
+	while (i < maxNumbers)
 	{
 		if (ios.ReadInt(numbers[i]))
 			i++;	
+		else
+			ios.Print("Nieprawidlowa wartosc, powtorz: ");
 	}
 	
-	ios.Print("Wprowadziles: ");
+	ios.Print("Wprowadzone liczby (od poczatku): ");
 	for (int i = 0; i < maxNumbers; i++)
 		ios.Print("[" + ss.ValueToStr(numbers[i]) + "] ");
-
 	ios.PrintLine("");
-	ios.Print("W odwrotnej kolejnosci: ");
+	ios.Print("Wprowadzone liczby (od konca): ");
 	for (int i = maxNumbers - 1; i > -1; i--)
 		ios.Print("[" + ss.ValueToStr(numbers[i]) + "] ");
+	ios.PrintLine("");
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 // [9] Pobierz od u¿ytkownika imiê i cyfrê, nastêpnie wypisz na ekranie podane imiê podan¹ liczbê razy.
+
 void CApplication::PrintNameMultipleTimes()
 {
-	ios.Print("Podaj imie: ");
 	string name;	
-	if (ios.ReadString(name))
-	{
-		ios.Print("Ile raz wypisac je na ekranie? ");
-		int number;
-		if (ios.ReadInt(number))
-		{			
+	int number;
+	const int myMax = 50;
+
+	if (ios.ReadString("Podaj imie:", name) &&
+		ios.ReadInt("Ile raz wypisac je na ekranie?", number) && (number > 0))
+	{			
+		if (number <= myMax)
+		{
 			string row = "", col = "";
 			for (int i = 0; i < number; i++)
 			{
 				row += name + " ";
 				col += "\n" + name;
 			}
-			ios.PrintLine("\nPOZIOMO\n" + row);
-			ios.PrintLine("\nPIONOWO" + col);
+			ios.PrintLine("\n- POZIOMO -\n" + row);
+			ios.PrintLine("\n- PIONOWO -" + col);
 		}
+		else
+			ios.PrintLine(ss.ValueToStr(number) + " razy? Bez przesady. Proponuje maksymalnie " +
+							ss.ValueToStr(myMax) + " powtorzen.");
 	}
+	else
+		ios.PrintLine("Jak nie chcesz, to nie wypisze");
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -355,20 +345,17 @@ void CApplication::DrawRectangle()
 	bool result = false;
 	int rows = 0, cols = 0;
 	char symbol = '*';
+	string buffer = "";
 
-	ios.Print("Podaj liczbe wierszy [ENTER]: ");
-	if (ios.ReadInt(rows) && (rows > 0))
+	if (ios.ReadInt("Podaj liczbe wierszy [ENTER]:", rows) && (rows > 0) &&
+		ios.ReadInt("Podaj liczbe kolumn [ENTER]:", cols) && (cols > 0) &&
+		ios.ReadString("Podaj znak wypelnienia [ENTER]:", buffer))
 	{
-		ios.Print("Podaj liczbe kolumn [ENTER]: ");
-		if (ios.ReadInt(cols) && (cols > 0))
+		ss.StrTrim(buffer);
+		if (buffer.length() > 0)
 		{
-			ios.Print("Podaj znak wypelnienia [ENTER]: ");
-			string buf = "";
-			if (ios.ReadString(buf) && (ss.StrTrim(buf).length() > 0))
-			{
-				symbol = buf[0];
-				result = true;
-			}
+			symbol = buffer[0];
+			result = true;
 		}
 	}
 
@@ -387,4 +374,3 @@ void CApplication::DrawRectangle()
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-
