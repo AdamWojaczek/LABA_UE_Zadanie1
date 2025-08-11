@@ -94,7 +94,7 @@ void CApplication::RunQuest(int questId)
 		case 4:	 HelloFriend();					break;
 		case 5:	 SumFirstAndLastTabElement();	break;
 		case 6:	 CheckUserNumber();				break;	
-		case 7:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
+		case 7:	 GuessTheNumber();				break;
 		case 8:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
 		case 9:	 ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
 		case 10: ios.PrintLine("Zadanie numer (" + ss.ValueToStr(questId) + ") jest w opracowaniu...");	break;
@@ -238,6 +238,44 @@ void CApplication::CheckUserNumber()
 			ios.PrintLine("Podana liczba to ZERO");
 		else
 			ios.PrintLine("Tutaj nie wejdziemy :)");
+	}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+
+// 7. Gra logiczna - zadeklaruj wartoœæ sekretnej liczby(w zakresie 1 - 10), poproœ u¿ytkownika o zgadniêcie liczby
+// i wypisz na ekranie informacjê zwrotn¹ (liczba za ma³a, za du¿a, trafi³eœ)
+void CApplication::GuessTheNumber()
+{
+	bool result = false;
+	
+	srand(time(nullptr));
+	int secretNumber = (int)(rand() % 10) + 1;
+	int counter = 0, number = -1;
+
+	ios.PrintLine("Zgadnij ukryta liczbe (calkowta) od 1 do 10, [0 koniec gry]");
+	while (!result && (number != 0))
+	{
+		ios.Print("Podaj liczbe [proba nr " + ss.ValueToStr(++counter) + "]: ");
+		if (ios.ReadInt(number))
+		{
+			if ((number > 0) && (number < 11))
+			{
+				if (number == secretNumber)
+				{
+					ios.PrintLine("*** Gratuluje, prawidlowo zgadles ukryta liczbe! ***");
+					result = true;					
+				}
+				else if (number > secretNumber)
+					ios.PrintLine("[>] Liczba jest za duza");
+				else
+					ios.PrintLine("[<] Liczba jest za mala");
+			}
+			else if (number == 0)
+				ios.PrintLine("Opuszczasz gre...");
+			else
+				ios.PrintLine("Nieprawidlowa liczba!");
+		}
 	}
 }
 
